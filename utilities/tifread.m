@@ -3,7 +3,7 @@ function data = tifread(filepath)
 % only works for grayscale with same width and height for each frame
 % 
 % filepath can be a local file in current directory or full filename
-% Andrew Landau, January 2019
+% Andrew Landau, January 2019; Edited from Darcy Peterka "bigread"
 
 fid = fopen(filepath, 'rb');
 tifname = fopen(fid); % get full filepath
