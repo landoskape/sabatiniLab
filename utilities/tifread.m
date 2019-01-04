@@ -3,7 +3,7 @@ function data = tifread(filepath)
 % only works for grayscale with same width and height for each frame
 % 
 % filepath can be a local file in current directory or full filename
-% Andrew Landau, January 2019; Edited from Darcy Peterka "bigread"
+% Andrew Landau, January 2019; Edited from Darcy Peterka's "bigread"
 
 fid = fopen(filepath, 'rb');
 tifname = fopen(fid); % get full filepath
@@ -37,28 +37,32 @@ rows = info(1).Height;
 data = zeros(rows,cols,numFrames,form);
 
 % Depending on file type, read out binary data directly
+% Within each- go to start of data for each frame
+% Read in binary data and transpose if necessary
 if strcmpi(form,'uint16') || strcmpi(form,'uint8')
     if(bo)
-        for cnt = 1:numFrames
-            fseek(fid,ofds(cnt),'bof'); % go to start of data for each frame
-            data(:,:,cnt) = fread(fid, [cols rows], form, 0, 'ieee-be')'; % read in and transpose
+        for frame = 1:numFrames
+            fseek(fid,ofds(frame),'bof');
+            data(:,:,frame) = fread(fid, [cols rows], form, 0, 'ieee-be')';
         end
     else
-        for cnt = 1:numFrames
-            fseek(fid,ofds(cnt),'bof');
-            data(:,:,cnt) = fread(fid, [cols rows], 'int16', 0, 'ieee-le')';
+        for frame = 1:numFrames
+            fseek(fid,ofds(frame),'bof');
+            data(:,:,frame) = fread(fid, [cols rows], 'int16', 0, 'ieee-le')';
         end
     end
 elseif strcmpi(form,'single')
-    for cnt = 1:numFrames
-        fseek(fid,ofds(cnt),'bof');
-        data(:,:,cnt) = fread(fid, [cols rows], form, 0, 'ieee-be');
+    for frame = 1:numFrames
+        fseek(fid,ofds(frame),'bof');
+        data(:,:,frame) = fread(fid, [cols rows], form, 0, 'ieee-be');
     end
 elseif strcmpi(form,'double')
-    for cnt = 1:numFrames
-        fseek(fid,ofds(cnt),'bof');
-        data(:,:,cnt) = fread(fid, [cols rows], form, 0, 'ieee-le.l64');
+    for frame = 1:numFrames
+        fseek(fid,ofds(frame),'bof');
+        data(:,:,frame) = fread(fid, [cols rows], form, 0, 'ieee-le.l64');
     end
+else
+    fprintf(2,'form not recognized\n');
 end
 
 fclose(fid); % bye
