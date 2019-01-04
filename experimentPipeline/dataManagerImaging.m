@@ -720,6 +720,7 @@ tname = dir(fullfile(handles.ename.UserData.wpath,sprintf('*%s.tif',zeroPadNum2S
 tname = tname.name;
 tif = tifread(fullfile(handles.ename.UserData.wpath,tname));
 
+% Need this to extract correct data
 state = getXFile(handles.ename.UserData.wpath,'state');
 pmtOffsets = [state(acqNum).acq.pmtOffsetChannel1 state(acqNum).acq.pmtOffsetChannel2];
 pmtOffsets = pmtOffsets * state(acqNum).acq.binFactor;
