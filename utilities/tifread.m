@@ -54,12 +54,12 @@ if strcmpi(form,'uint16') || strcmpi(form,'uint8')
 elseif strcmpi(form,'single')
     for frame = 1:numFrames
         fseek(fid,ofds(frame),'bof');
-        data(:,:,frame) = fread(fid, [cols rows], form, 0, 'ieee-be');
+        data(:,:,frame) = fread(fid, [cols rows], form, 0, 'ieee-be')';
     end
 elseif strcmpi(form,'double')
     for frame = 1:numFrames
         fseek(fid,ofds(frame),'bof');
-        data(:,:,frame) = fread(fid, [cols rows], form, 0, 'ieee-le.l64');
+        data(:,:,frame) = fread(fid, [cols rows], form, 0, 'ieee-le.l64')';
     end
 else
     fprintf(2,'form not recognized\n');

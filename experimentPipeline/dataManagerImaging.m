@@ -8,7 +8,7 @@ function varargout = dataManagerImaging(varargin)
 %
 %      DATAMANAGERIMAGING('CALLBACK',hObject,eventData,handles,...) calls the local
 %      function named CALLBACK in DATAMANAGERIMAGING.M with the given input arguments.
-%       
+%      
 %      DATAMANAGERIMAGING('Property','Value',...) creates a new DATAMANAGERIMAGING or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
 %      applied to the GUI before dataManagerImaging_OpeningFcn gets called.  An
@@ -447,6 +447,7 @@ guidata(hObject,handles);
 
 % --- Executes on button press in avgInButton.
 function avgInButton_Callback(hObject, eventdata, handles) %#ok
+
 for wf = 1:length(handles.ename.UserData.waveNames)
     if handles.ename.UserData.waveID(wf,1)
         id = handles.ename.UserData.waveNames{wf}(1:3);
@@ -470,7 +471,7 @@ plotTifButton_Callback(hObject, eventdata, handles);
 guidata(hObject,handles);
 
 
-% --- Executes on button press in findAcqButton.
+% --- Executes on button press in findAcq button.
 function findAcqButton_Callback(hObject, eventdata, handles) %#ok
 [file,fpath] = uigetfile(fullfile(handles.ename.UserData.wpath,'*.mat')); % Select an acquisition
 if ~strcmp(fpath(1:end-1),handles.ename.UserData.wpath)

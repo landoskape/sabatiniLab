@@ -25,7 +25,7 @@ end
 
 
 tif = loadtiff(fullfile(fpath,name)); % load up tiff file (it's probably a uint32)
-data = double(tif(:,:,channel:3:end)); % get data from channel of interest and make into double
+data = tif(:,:,channel:3:end); % get data from channel of interest and make into double
 mzp = max(data,[],3); % grab maximum value for each pixel across slices
 
 % Retrieve screen size to predefine figure sizing
