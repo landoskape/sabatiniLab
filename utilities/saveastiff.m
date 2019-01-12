@@ -235,7 +235,7 @@ while ~exist('tfile', 'var')
                 end
             else % Append to an existing file
                 tfile = Tiff([fname, fext], 'r+');
-                while ~tfile.lastDirectory(); % Append a new image to the last directory of an exiting file
+                while ~tfile.lastDirectory() % Append a new image to the last directory of an exiting file
                     tfile.nextDirectory();
                 end
                 tfile.writeDirectory();
@@ -269,7 +269,7 @@ if exist('path_parent', 'var'), cd(path_parent); end
 
 tElapsed = toc(tStart);
 if options.message
-    display(sprintf('The file was saved successfully. Elapsed time : %.3f s.', tElapsed));
+    fprintf('The file was saved successfully. Elapsed time : %.3f s.\n', tElapsed);
 end
 
 catch exception

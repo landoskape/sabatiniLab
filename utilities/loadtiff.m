@@ -87,7 +87,7 @@ while true
     end
     iinfo(tfl).cid = tcl; % Cell number of this frame
     
-    if tiff.lastDirectory(), break; end;
+    if tiff.lastDirectory(), break; end
     tiff.nextDirectory();
 end
 

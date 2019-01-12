@@ -24,8 +24,8 @@ else
 end
 
 
-tif = loadtiff(fullfile(fpath,name)); % load up tiff file (it's probably a uint32)
-data = tif(:,:,channel:3:end); % get data from channel of interest and make into double
+tif = tifread(fullfile(fpath,name)); % load up tiff file (it's probably a uint16)
+data = cast(tif(:,:,channel:3:end),'single'); % get data from channel of interest and make into double
 mzp = max(data,[],3); % grab maximum value for each pixel across slices
 
 % Retrieve screen size to predefine figure sizing
@@ -114,6 +114,8 @@ range = get(slider,'Value')*(cAxis(2) - cAxis(1));
 % Normalize mzp to current axis
 mzp = mzp - cAxis(1);
 mzp = mzp ./ range;
+mzp(mzp>1)=1;
+mzp = cast(mzp*65000,'uint16'); % cast as uint16
 
 % Get file name and path to save. This function won't work if there are
 % multiple tif files that end in the same number, so if the given name will
@@ -140,47 +142,26 @@ while needName
         needName = 0;
     end
 end
-options.overwrite = true;
-notSaved = saveastiff(mzp,fullfile(savePath,fileName),options); % save tiff. Saved is 1 when error
-if notSaved
+
+% Try to write tiff, report to user if failed
+try
+    t = Tiff(fullfile(savePath,fileName), 'w');
+    tagstruct.ImageLength = size(mzp, 1);
+    tagstruct.ImageWidth = size(mzp, 2);
+    tagstruct.Compression = Tiff.Compression.None;
+    tagstruct.SampleFormat = Tiff.SampleFormat.UInt;
+    tagstruct.Photometric = Tiff.Photometric.MinIsBlack;
+    tagstruct.BitsPerSample = 16; % uint16
+    tagstruct.SamplesPerPixel = 1; % grayscale, only real values
+    tagstruct.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky; % who came up with this
+    t.setTag(tagstruct);
+    t.write(mzp);
+    t.close();
+    fprintf('mzp saved in: %s\n',fullfile(savePath,fileName));
+catch
     h = warndlg('tiff file not saved');
     uiwait(h);
 end
-    
-
-
-% -- compression interface, code not ready yet -- 
-% Make Compression interface
-% compressionSlider = uicontrol('Style','Slider','String','Compression','Enable','off',...
-%     'units','pixels','position',[widthFigure*0.32 heightFigure*0.01 widthFigure*0.635 heightFigure*0.033],...
-%     'Value',1,'Min',1.1,'Max',20,'SliderStep',[0.01 0.1],...
-%     'Callback',@(src,event)compressSliderCallback(src,event,ax,mzp,baseColorAxis,cAxisSlider));
-% compressionToggle = uicontrol('Style','togglebutton','String','Compress MZP?','Fontsize',12,...
-%     'units','pixels','position',[widthFigure*0.05 heightFigure*0.01 widthFigure*0.25 heightFigure*0.04],...
-%     'Callback',@(src,event)compressToggleCallback(src,event,ax,mzp,baseColorAxis,compressionSlider));
-% function compressSliderCallback(compressionSlider,~,ax,mzp)
-% compressValue = compressionSlider.Value; % pull out compression value
-% newData = log(mzp)./log(compressValue); % compress data
-% imagesc(ax,newData); % plot data
-% 
-% function compressToggleCallback(src,~,ax,mzp,baseColorAxis,compressionSlider);
-% if (src.Value == 0)
-%     % Turning compression off
-%     compressionSlider.Enable = 'off'; % disable compression slider
-%     
-%     % Get uncompressed color axis, replot and set axis
-%     range = baseColorAxis(2) - baseColorAxis(1); 
-%     newMax = baseColorAxis(1) + src.Value * range;
-%     imagesc(ax,mzp);
-%     ax.CLim = [baseColorAxis(1) newMax];
-% else
-%     % Turning compression on
-%     compressionSlider.Enable = 'on'; % enable compression slider
-%     compressValue = src.Value;
-%     newData = log(mzp)./log(compressValue);
-%     imagesc(ax,newData);
-% end
-
 
 
 
