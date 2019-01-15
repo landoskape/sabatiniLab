@@ -259,6 +259,11 @@ if NC>10
 else
     for c = 1:NC
         load(clist{c});
+        if contains(clist{c},'.mat')
+            handles.ename.UserData.loadedWaves{end+1} = clist{c}(1:strfind(clist{c},'.mat')-1);
+        else
+            handles.ename.UserData.loadedWaves{end+1} = clist{c};
+        end
         col = 'k'; 
         lwid = '0.5';
         if handles.plotTrialsButton.UserData.showTrialFlag
@@ -273,6 +278,11 @@ if handles.plotTrialsButton.UserData.showTrialFlag
     col = 'r'; lwid = '2';
     idx = (cAcqNums == handles.acqList.UserData.acqs(handles.acqList.Value));
     load(clist{idx});
+    if contains(clist{idx},'.mat')
+        handles.ename.UserData.loadedWaves{end+1} = clist{idx}(1:strfind(clist{idx},'.mat')-1);
+    else
+        handles.ename.UserData.loadedWaves{end+1} = clist{idx};
+    end
     eval(['plot(phTime,',clist{idx},'.data,''color'',''',col,''',''linewidth'',',lwid,')']);
 end
 xlabel('Time (ms)');
@@ -297,6 +307,11 @@ if NC>10
 else
     for c = 1:NC
         load(clist{c});
+        if contains(clist{c},'.mat')
+            handles.ename.UserData.loadedWaves{end+1} = clist{c}(1:strfind(clist{c},'.mat')-1);
+        else
+            handles.ename.UserData.loadedWaves{end+1} = clist{c};
+        end
         xscale = getfield(eval(clist{c}),'xscale');
         imTime = xscale(1):xscale(2):length(eval(clist{c}))*xscale(2)-xscale(2); %#ok yes it is
         col = 'k'; 
@@ -317,6 +332,11 @@ if handles.plotTrialsButton.UserData.showTrialFlag
     col = 'r'; lwid = '2';
     idx = (cAcqNums == handles.acqList.UserData.acqs(handles.acqList.Value));
     load(clist{idx});
+    if contains(clist{idx},'.mat')
+        handles.ename.UserData.loadedWaves{end+1} = clist{idx}(1:strfind(clist{idx},'.mat')-1);
+    else
+        handles.ename.UserData.loadedWaves{end+1} = clist{idx};
+    end
     xscale = getfield(eval(clist{idx}),'xscale'); 
     imTime = xscale(1):xscale(2):length(eval(clist{idx}))*xscale(2)-xscale(2); %#ok yes it is
     eval(['plot(imTime,',clist{idx},'.data,''color'',''',col,''',''linewidth'',',lwid,')']);
@@ -380,6 +400,11 @@ checkClamp = zeros(NC,1);
 clampMode = zeros(NC,1);
 for c = 1:NC
     load(clist{c});
+    if contains(clist{c},'.mat')
+        handles.ename.UserData.loadedWaves{end+1} = clist{c}(1:strfind(clist{c},'.mat')-1);
+    else
+        handles.ename.UserData.loadedWaves{end+1} = clist{c};
+    end
     cstate = eval(['makeState(',clist{c},'.UserData.headerString);']);
     clampMode(c,1) = cstate.phys.settings.currentClamp0;
     if ~isequal(cstate.phys.settings.currentClamp0,hs.phys.settings.currentClamp0)
@@ -452,6 +477,11 @@ for wf = 1:length(handles.ename.UserData.waveNames)
     evalin('base', ['cd(''',handles.ename.UserData.wpath,''')']);
     evalin('base', ['save(''',handles.ename.UserData.waveNames{wf},...
         ''',''',handles.ename.UserData.waveNames{wf},''');']);
+    if contains(fName{1},'.mat')%#ok
+        handles.ename.UserData.loadedWaves{end+1} = fName{1}(1:strfind(fName{1},'.mat')-1);
+    else
+        handles.ename.UserData.loadedWaves{end+1} = fName{1};
+    end
 end
 handles.acqList.Value = 1;
 handles.channelSelector.UserData.lastChannel = handles.channelSelector.Value;
