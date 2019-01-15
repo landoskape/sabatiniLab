@@ -10,8 +10,6 @@ else
     eval(['global ',file]); % open global variable
     if eval( ['~isempty(',file,')'] )
         fprintf(1,'overwriting %s in workspace...\n',file);
-    else
-        clear('-global',file); 
     end
     eval( [file, '=[];'] ); % (Re)initialize
     cload = load(fullfile(pth,'xfiles.mat')); %#ok learn eval dammit

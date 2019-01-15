@@ -3,6 +3,17 @@ function analyzeCell(dpath, dstr, cstr)
 % as cstr
 % Master script for ePhys & imaging analysis
 
+if ~nargin
+    dpath = cd;
+    [~,cfolder] = fileparts(dpath);
+    if strcmp(cfolder(1:3),'ATL')
+        dstr = str2double(cfolder(4:9));
+        cstr = cfolder(10:end);
+    else
+        error('folder name needs to be ATLYYMMDDi to decode without inputs');
+    end
+end
+
 % Setup globals 
 global meta 
 global state 

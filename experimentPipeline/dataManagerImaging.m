@@ -56,6 +56,7 @@ if isfield(handles.showInputs.UserData, 'cfig')
         delete(handles.showInputs.UserData.cfig);
     end
 end
+clearvars('-global',handles.ename.UserData.loadedWaves{:});
 delete(hObject);
 
 % --- Executes just before dataManagerImaging is made visible.
@@ -67,6 +68,7 @@ function dataManagerImaging_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to dataManagerImaging (see VARARGIN)
 
 
+handles.ename.UserData.loadedWaves = {};
 handles.output = hObject;
 guidata(hObject, handles);
 
@@ -295,6 +297,8 @@ if NC>10
 else
     for c = 1:NC
         load(clist{c});
+        xscale = getfield(eval(clist{c}),'xscale');
+        imTime = xscale(1):xscale(2):length(eval(clist{c}))*xscale(2)-xscale(2); %#ok yes it is
         col = 'k'; 
         lwid = '0.5';
         if handles.plotTrialsButton.UserData.showTrialFlag
@@ -302,13 +306,19 @@ else
                 continue
             end
         end
-        eval(['plot(imTime,',clist{c},'.data,''color'',''',col,''',''linewidth'',',lwid,')']);
+        try
+            eval(['plot(imTime,',clist{c},'.data,''color'',''',col,''',''linewidth'',',lwid,')']);
+        catch
+            disp('here')
+        end
     end
 end
 if handles.plotTrialsButton.UserData.showTrialFlag
     col = 'r'; lwid = '2';
     idx = (cAcqNums == handles.acqList.UserData.acqs(handles.acqList.Value));
     load(clist{idx});
+    xscale = getfield(eval(clist{idx}),'xscale'); 
+    imTime = xscale(1):xscale(2):length(eval(clist{idx}))*xscale(2)-xscale(2); %#ok yes it is
     eval(['plot(imTime,',clist{idx},'.data,''color'',''',col,''',''linewidth'',',lwid,')']);
 end
 xlabel('Time (ms)');
@@ -347,8 +357,15 @@ end
 
 % plot components phys
 idx = strfind(inName, 'AD0');
-inName(idx:idx+2) = 'AD1';
+inName(idx+2) = '1'; % rename to AD1
 loadWaveo(inName);
+if ~any(strcmp(handles.ename.UserData.loadedWaves,inName))
+    if contains(strfind(inName,'.mat'))
+        handles.ename.UserData.loadedWaves{end+1} = inName(1:strfind(inName,'.')-1);
+    else
+        handles.ename.UserData.loadedWaves{end+1} = inName;
+    end
+end
 clist = eval(['avgComponentList(''',inName,''')']);
 NC = length(clist);
 
@@ -744,6 +761,13 @@ for c = 1:length(idxROI)
     acqName = handles.ename.UserData.waves.(...
             handles.ename.UserData.waveNames{idxROI(c)}).UserData.Components{idxAcq};
     loadWaveo(fullfile(handles.ename.UserData.wpath,acqName{1}));
+    if ~any(strcmp(handles.ename.UserData.loadedWaves,acqName{1}))
+        if contains(acqName{1},'.mat')
+            handles.ename.UserData.loadedWaves{end+1} = acqName{1}(1:strfind(acqName{1},'.mat')-1);
+        else
+            handles.ename.UserData.loadedWaves{end+1} = acqName{1};
+        end
+    end
     
     chNum = str2double(acqName{1}(strfind(acqName{1},'c')+1:strfind(acqName{1},'r')-1));
     ctif = tif(:,:,chNum);
@@ -772,6 +796,13 @@ close(h);
 function loadAverage(fpath,file,hObject,~,handles)
 
 loadWaveo(fullfile(fpath,file)); % Load the wave
+if ~any(strcmp(handles.ename.UserData.loadedWaves,file))
+    if contains(file,'.mat')
+        handles.ename.UserData.loadedWaves{end+1} = file(1:strfind(file,'.mat')-1);
+    else
+        handles.ename.UserData.loadedWaves{end+1} = file;
+    end
+end
 
 % Find other waves in average
 [wFiles,waveID] = findWavesInAverage(file,fpath);
@@ -781,6 +812,13 @@ handles.ename.UserData.wpath = fpath;
 for wf=1:length(wFiles)
     % Load wave data to ename
     handles.ename.UserData.waves.(wFiles{wf}) = loadWaveo(wFiles{wf});
+    if ~any(strcmp(handles.ename.UserData.loadedWaves,wFiles{wf}))
+        if contains(wFiles{wf},'.mat')
+            handles.ename.UserData.loadedWaves{end+1} = wFiles{wf}(1:strfind(wFiles{wf},'.mat')-1);
+        else
+            handles.ename.UserData.loadedWaves{end+1} = wFiles{wf};
+        end
+    end
 end
 
 % Make list of averages
@@ -935,6 +973,13 @@ handles.acqNumEditor.UserData.lastAcq = str2double(acqStr);
 
 for a = 1:length(aFiles)
     handles.acqNumEditor.UserData.acqs.(aFiles{a}) = loadWaveo(fullfile(fpath,aFiles{a}));
+    if ~any(strcmp(handles.ename.UserData.loadedWaves,aFiles{wf}))
+        if contains(aFiles,'.mat')
+            handles.ename.UserData.loadedWaves{end+1} = aFiles{wf}(1:strfind(aFiles{wf},'.mat'));
+        else
+            handles.ename.UserData.loadedWaves{end+1} = aFiles{wf};
+        end
+    end
 end
 
 plotAcquisition_Callback(hObject,eventdata,handles);
