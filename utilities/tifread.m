@@ -19,9 +19,17 @@ if (bd==64)
 elseif(bd==32)
     form='single';
 elseif (bd==16)
-    form='uint16';
+    if ~isempty(strfind(info.SampleFormat,'Unsigned'))
+        form='uint16';
+    else
+        form='int16';
+    end
 elseif (bd==8)
-    form='uint8';
+    if ~isempty(strfind(info.SampleFormat,'Unsigned'))
+        form='uint8';
+    else
+        form='int8';
+    end
 end
 if bo
     machinefmt = 'ieee-be';
@@ -44,7 +52,7 @@ data = zeros(rows,cols,numFrames,form);
 % Depending on file type, read out binary data directly
 % Within each- go to start of data for each frame
 % Read in binary data and transpose to expected matlab ordering
-if strcmpi(form,'uint16') || strcmpi(form,'uint8')
+if strcmpi(form,'uint16') || strcmpi(form,'uint8') || strcmpi(form,'int16') || strcmpi(form,'int8')
     for frame = 1:numFrames
             fseek(fid,ofds(frame),'bof');
             data(:,:,frame) = fread(fid, [cols rows], form, 0, machinefmt)';

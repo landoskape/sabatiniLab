@@ -8,4 +8,4 @@ end
 
 save(fullfile(meta.dpath,'xfiles.mat'),'meta','state','data','exp');
 
-fprintf('Finished.\n');
+fprintf(1,'Cell xFiles saved in: %s.\n',meta.dpath);

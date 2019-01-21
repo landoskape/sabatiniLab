@@ -15,7 +15,7 @@ wnames = {d(:).name};
 % If statement that only runs if same average name has multiple phys
 % traces. Very unlikely if a pulse pattern number is assigned
 if sum(cellfun(@(c) contains(c, 'AD0'), wnames, 'uni', 1))>1
-    uiwait(errordlg(sprintf('%s\nMore than one average exist for the selected epoch. Select manually...',msg)));
+    uiwait(errordlg(sprintf('%s\nMore than one average exist for epoch %d. Select manually...',msg,epoch)));
     [file,fpath] = uigetfile(fullfile(pth,'*.mat')); % Have user select a file
     
     [~,~,ext] = fileparts(file);

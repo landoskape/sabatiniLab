@@ -477,11 +477,7 @@ for wf = 1:length(handles.ename.UserData.waveNames)
     evalin('base', ['cd(''',handles.ename.UserData.wpath,''')']);
     evalin('base', ['save(''',handles.ename.UserData.waveNames{wf},...
         ''',''',handles.ename.UserData.waveNames{wf},''');']);
-    if contains(fName{1},'.mat')%#ok
-        handles.ename.UserData.loadedWaves{end+1} = fName{1}(1:strfind(fName{1},'.mat')-1);
-    else
-        handles.ename.UserData.loadedWaves{end+1} = fName{1};
-    end
+    handles.ename.UserData.loadedWaves{end+1} = evalin('base', 'fName{1};');
 end
 handles.acqList.Value = 1;
 handles.channelSelector.UserData.lastChannel = handles.channelSelector.Value;

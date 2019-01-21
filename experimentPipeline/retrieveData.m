@@ -28,7 +28,7 @@ state = struct();
 cDir = cd;
 if ~exist(stnames{1},'file'), cd(meta.dpath), end
 
-fprintf('| %d files found... \n| compiling file ',NF);
+fprintf(1,'| compiling file ');
 cFileTimer = tic;
 for n = 1:NF
     cacq = stAcqNums(n);
@@ -36,7 +36,7 @@ for n = 1:NF
     if (rem(n,10)==0) || (n==NF)
     	if n>10, fprintf(repmat('\b',1,length(msg))); end
         msg = sprintf('%d / %d ...',n,NF);
-        fprintf(msg);
+        fprintf(1,msg);
     end
     
     fid = fopen(stnames{n});
@@ -61,7 +61,7 @@ for n = 1:NF
         end
     end
 end
-fprintf(' finished compiling. %d seconds. \n',round(toc(cFileTimer)));
+fprintf(1,' finished compiling. %d seconds. \n',round(toc(cFileTimer)));
 
 
 %% Compile Data
