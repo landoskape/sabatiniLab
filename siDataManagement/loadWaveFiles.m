@@ -11,7 +11,7 @@ for w = 1:NW
         loadWaveo(fullfile(fpath,list{w}));
         idxSuccess(w) = true;
     catch
-        % some weird shit!
+        error('% some weird shit! -- ');
     end
 end
         

@@ -24,13 +24,13 @@ else
 end
 
 
-tif = tifread(fullfile(fpath,name)); % load up tiff file (it's probably a uint16)
-data = cast(tif(:,:,channel:3:end),'single'); % get data from channel of interest and make into double
+tif = tifread(fullfile(fpath,name)); % load up tiff file
+data = cast(tif(:,:,channel:3:end),'single'); % get data from channel of interest and make into single
 mzp = max(data,[],3); % grab maximum value for each pixel across slices
 
 % Retrieve screen size to predefine figure sizing
 pixelsInScreen = get(0,'screensize');
-pixelsInScreen = pixelsInScreen([3 4]); 
+pixelsInScreen = pixelsInScreen([3 4]);
 
 widthFigure = min([min(pixelsInScreen)/2 max(pixelsInScreen)/3]);
 heightFigure = min([min(pixelsInScreen)/2 max(pixelsInScreen)/3])*1.2;
@@ -42,7 +42,7 @@ mzpFigure = figure; % make new figure
 set(mzpFigure, 'units','pixels','outerposition',figurePosition); % make rectangle on screen
 imagesc(mzp); % print image
 ax = gca; % make axis a variable, get rid of x/y tick marks
-set(ax,'XTick',[]); 
+set(ax,'XTick',[]);
 set(ax,'YTick',[]);
 set(ax,'units','normalized','position',axisPosition);
 colormap(ax,'gray'); % we want this to be grayscale
@@ -76,7 +76,7 @@ uicontrol('Parent',mzpFigure,'Style','pushbutton','String','saveTiff','Fontsize'
     'units','normalized','position',[0.845 0.01 0.15 0.035],...
     'Callback',@(src,event)saveTiff(src,event,mzp,acqNum,fpath));
 
-% ------ Call back functions ------ 
+% ------ Call back functions ------
 
 % -- sliderCallback - movement of slider adjusts the maximum value of cAxis
 function sliderCallback(slider,~,ax)
@@ -109,7 +109,7 @@ set(resetButton,'Enable','off');
 function saveTiff(~,~,mzp,acqNum,fpath)
 slider = findobj(gcf,'Tag','cAxisSlider'); % get slider object
 % snapshot of current color axis
-cAxis = get(slider,'UserData'); 
+cAxis = get(slider,'UserData');
 range = get(slider,'Value')*(cAxis(2) - cAxis(1));
 % Normalize mzp to current axis
 mzp = mzp - cAxis(1);
@@ -132,7 +132,7 @@ while needName
         fpath = fpath(1:end-1);
     end
     if nameConflated && strcmp(savePath,fpath)
-        questTxt = {'Selected save name will make this file indistinguishable from original data to this function.'; 
+        questTxt = {'Selected save name will make this file indistinguishable from original data to this function.';
             'Suggested naming convention: don''t end file name with acquisition number.'};
         response = questdlg(questTxt,'Filename?','Continue','Rename','Rename');
         if strcmp(response,'Continue')
@@ -162,7 +162,3 @@ catch
     h = warndlg('tiff file not saved');
     uiwait(h);
 end
-
-
-
-

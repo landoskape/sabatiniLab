@@ -5,7 +5,7 @@ function info = remakeAverages(pth,mask)
 %  *** but can include a check on state for cycle position later
 % if included mask gives list of epochs to remake average for
 if nargin<1 || isempty(pth)
-    pth = pwd;
+    pth = cd;
 end
 state = getXFile(pth,'state');
 epochList = [state(:).epoch];

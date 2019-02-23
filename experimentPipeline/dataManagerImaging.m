@@ -22,7 +22,7 @@ function varargout = dataManagerImaging(varargin)
 
 % Edit the above text to modify the response to help dataManagerImaging
 
-% Last Modified by GUIDE v2.5 03-Jun-2018 19:06:13
+% Last Modified by GUIDE v2.5 29-Jan-2019 11:04:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -467,7 +467,14 @@ end
 % --- Executes on button press in avgOutButton.
 function avgOutButton_Callback(hObject, eventdata, handles) %#ok
 outNum = handles.acqList.UserData.acqs(handles.acqList.Value);
-for wf = 1:length(handles.ename.UserData.waveNames)
+roiOnly = logical(handles.roiOnly.Value); % roiOnly button for averaging in and out
+if ~roiOnly
+    aoidx = 1:length(handles.ename.UserData.waveNames);
+else
+    croi = handles.roiSelector.Value;
+    aoidx = find(handles.ename.UserData.waveID(:,3)==croi); % waves with current roi
+end
+for wf = aoidx(:)'
     evalin('base', ...
         ['idxOut = cellfun(@(c) contains(c,[''_'',''',num2str(outNum),''']),'...
         handles.ename.UserData.waveNames{wf},'.UserData.Components, ''uni'', 1);']);

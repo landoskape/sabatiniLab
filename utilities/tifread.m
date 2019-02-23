@@ -19,13 +19,13 @@ if (bd==64)
 elseif(bd==32)
     form='single';
 elseif (bd==16)
-    if ~isempty(strfind(info.SampleFormat,'Unsigned'))
+    if isfield(info(1),'SampleFormat') && ~isempty(strfind(info(1).SampleFormat,'Unsigned'))
         form='uint16';
     else
         form='int16';
     end
 elseif (bd==8)
-    if ~isempty(strfind(info.SampleFormat,'Unsigned'))
+    if isfield(info(1),'SampleFormat') && ~isempty(strfind(info(1).SampleFormat,'Unsigned'))
         form='uint8';
     else
         form='int8';

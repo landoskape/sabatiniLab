@@ -6,6 +6,12 @@ function array = dsarray(array,dsfactor)
 N = size(array,1);
 M = size(array,2);
 
+if (N==1) && (size(array,3)==1)
+    array = array(:);
+    N = M;
+    M = 1;
+end
+
 arr1 = permute(array,[3 1 2]);
 arr2 = reshape(arr1, dsfactor, N/dsfactor, M);
 arr3 = mean(arr2,1);

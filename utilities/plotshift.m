@@ -8,13 +8,16 @@ function ax = plotshift(varargin)
 
 estimateScale = 1;
 if ishandle(varargin{1})
-    axis(varargin{1})
+    axis(varargin{1});
     ax = gca;
     t = varargin{2};
     data = varargin{3};
-    if length(varargin)==4
+    if length(varargin)>=4
         estimateScale = 0;
         scale = varargin{4};
+    end
+    if length(varargin)>4
+        mod = varargin{5:end};
     end
 elseif length(varargin)>1
     t = varargin{1};
@@ -24,7 +27,7 @@ elseif length(varargin)>1
         scale = varargin{3};
     end
     if length(varargin)>=4
-        mod = varargin{4};
+        mod = varargin{4:end};
     end
 else
     data = varargin{1};
@@ -40,7 +43,7 @@ hold on;
 shift = [0, cumsum(width*scale)];
 for c = 1:size(data,2)
     if exist('mod','var')
-        plot(t,data(:,c)+shift(c),mod);
+        plot(t,data(:,c)+shift(c),mod{:});
     else
         plot(t,data(:,c)+shift(c));
     end
