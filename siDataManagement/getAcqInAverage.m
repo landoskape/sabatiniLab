@@ -1,4 +1,4 @@
-function [names,wID] = getAcqInAverage(averageID,pth,printFlag)
+function [names,wID,globalVarNames] = getAcqInAverage(averageID,pth,printFlag)
 
 aname = makeAverageName(averageID);
 if (nargin == 1)
@@ -11,6 +11,7 @@ end
 d = dir(fullfile(pth,strcat('*',aname,'*')));
 wfiles = {d(:).name};
 wnames = cellfun(@(w) w(1:strfind(w,'.')-1), wfiles, 'uni', 0);
+globalVarNames = wnames;
 
 NW = length(wfiles);
 names = cell(1,NW);

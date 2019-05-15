@@ -52,7 +52,7 @@ if isempty(L)
 end % Length for padding
 
 if (dPad ~= find(~dEqual))
-        error('Unequal dimension different from user-specified nanpad dimension');
+    error('Unequal dimension different from user-specified nanpad dimension');
 end
 
 

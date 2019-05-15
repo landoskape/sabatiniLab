@@ -52,7 +52,7 @@ if length(epoch)==1
     end
 
     idxInput = cellfun(@(c) contains(c,'AD1'), names, 'uni', 1); 
-    fprintf(1,'NOTE: hard coding out AD1 because only used for input.\n'); 
+    %fprintf(1,'NOTE: hard coding out AD1 because only used for input.\n'); 
     names = names(~idxInput); 
     names = cellfun(@(c) c(1:strfind(c,'.')-1), names,'uni',0); 
     idxPhys = cellfun(@(c) contains(c,'AD0'),names,'uni',1); 
@@ -91,7 +91,7 @@ else
         end
         
         idxInput = cellfun(@(c) contains(c,'AD1'), names{e}, 'uni', 1); 
-        fprintf(1,'NOTE: hard coding out AD1 because only used for input.\n'); 
+        %fprintf(1,'NOTE: hard coding out AD1 because only used for input.\n'); 
         names{e} = names{e}(~idxInput); 
         names{e} = cellfun(@(c) c(1:strfind(c,'.')-1), names{e},'uni',0); 
         idxPhys = cellfun(@(c) contains(c,'AD0'),names{e},'uni',1); 

@@ -1,7 +1,7 @@
 function xfile = getXFile(pth,file)
 % - rewriting - this used to check if variable already existed in global
 % - this is simpler and just uses presence of nargout to optimize
-
+    
 
 if nargout==1
     cload = load(fullfile(pth,'xfiles.mat'));

@@ -669,7 +669,7 @@ imagesc(tif);
 colormap('gray');
 
 % Plot ROIs
-cMap = 'brkgmcykkkkkkkkkk';
+cMap = 'brgmcykkkkkkkkkk';
 if roiIsPS
     roiRadius = 0.5;
     ppm=10;  %approximate for 256x256, 20x zoom....

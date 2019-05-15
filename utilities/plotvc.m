@@ -20,6 +20,8 @@ end
 specFlag = 0;
 if (nargin == 4)
     specFlag = 1;
+    idxNumeric = cellfun(@isnumeric, specs, 'uni', 1);
+    specs(idxNumeric) = cellfun(@num2str,specs(idxNumeric),'uni',0);
     specs = cellfun(@(s) strcat(',',s), specs, 'uni',0);
     specs = cat(2, specs{:});
 end
