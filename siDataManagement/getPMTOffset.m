@@ -1,5 +1,9 @@
-function pmtOffset = getPMTOffset(state)
+function pmtOffset = getPMTOffset(state,channel)
+% Channel is an index ([1 2 3] is default)
+
 pmtOffset = state.acq.binFactor * [...
     state.acq.pmtOffsetChannel1... 
     state.acq.pmtOffsetChannel2... 
     state.acq.pmtOffsetChannel3];
+
+pmtOffset = pmtOffset(channel);

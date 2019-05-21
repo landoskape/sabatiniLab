@@ -6,7 +6,7 @@ if nargin == 1
     t = 1:size(data,1);
 end
 
-if size(data,2) == length(t) && size(data,1)~=1
+if size(data,2) == length(t) && size(data,1)~=1 && size(data,1)~=length(t)
     data = data';
 end
 
