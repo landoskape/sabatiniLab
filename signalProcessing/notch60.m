@@ -1,4 +1,5 @@
 function s = notch60(s, Fs, order)
+% s = notch60(s,Fs,order);
 
 if (nargin < 3)
     order = 2;
