@@ -15,7 +15,7 @@ function fullFileName = createCdFunction(functionName,pathName,targetDirectory)
 
 
 % Check input arguments
-[pathstr,name,~] = fileparts(functionName);
+[~,name,~] = fileparts(functionName);
 
 % Make function name into 
 fname = name;
@@ -37,17 +37,8 @@ if isempty(pathName)
     pathName = fname;
 end
 
-% Make sure there is a function directory
-if isempty(pathstr)
-    if (nargin < 3)
-        % Define path as current directory automatically
-        targetDirectory = pwd;
-        pathstr = pwd;
-    else
-        % Save path 
-        pathstr = targetDirectory;
-    end
-end
+% Always put cdFunctions in /sabatiniLab/pathManagement
+pathstr = '/Users/landauland/Documents/MATLAB/sabatiniLab/pathManagement';
 
 % Make function name / check existence
 fullFileName = fullfile(pathstr,strcat(functionName,'.m'));
