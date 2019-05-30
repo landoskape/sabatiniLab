@@ -1,5 +1,5 @@
-function [t,y,dy] = euclidapp(ode,tspan,initState,dt,ds)
-% [t,y,dy] = euclidapp(ode,tspan,initState,dt,ds)
+function [t,y,dy] = eulerapp(ode,tspan,initState,dt,ds)
+% [t,y,dy] = eulerapp(ode,tspan,initState,dt,ds)
 % 
 % t - time vector
 % y - values
