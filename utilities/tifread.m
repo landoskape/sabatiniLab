@@ -7,10 +7,11 @@ function data = tifread(filepath)
 
 fid = fopen(filepath, 'rb');
 tifname = fopen(fid); % get full filepath
-info = matlab.io.internal.imagesci.tifftagsread(tifname,0,0,0); % get image info - internal mex function
+
+info = matlab.io.internal.imagesci.imtifinfo(tifname); % get image info 
 numFrames = numel(info); % number of frames (directories)
 
-% Can handle multiple data types
+% handle multiple data types
 bd=info(1).BitDepth;
 he=info(1).ByteOrder;
 bo=strcmp(he,'big-endian');

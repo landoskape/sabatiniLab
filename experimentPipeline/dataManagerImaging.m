@@ -663,7 +663,8 @@ if isfield(handles.plotTifButton.UserData,'cfig')
     end
 else
     handles.plotTifButton.UserData.cfig = figure;
-    set(gcf,'units','normalized','outerposition',[0.6539 0.4200 0.3398 0.5138]);
+    %set(gcf,'units','normalized','outerposition',[0.6539 0.4200 0.3398 0.5138]);
+    set(gcf,'units','normalized','outerposition',[0.330468750000000   0.427083333333333   0.339843750000000   0.513888888888889]);
 end
 imagesc(tif);
 colormap('gray');
