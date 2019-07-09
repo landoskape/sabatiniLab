@@ -130,8 +130,8 @@ for n = 1:NF
         data(n).pt = (1:length(cdata.data)) / 1000 * cdata.xscale(2); % Add time (same if multiple chs)
     end
     % Define recording mode, and setup input gain
-    data(n).pulse = state(n).cycle.pulseToUse0;
-    data(n).pmode = state(n).phys.settings.currentClamp0;
+    data(n).pulse = state(n).cycle.pulseToUse1;
+    data(n).pmode = state(n).phys.settings.currentClamp1;
     gain = [20 400]; % [currentClamp voltageClamp] 
     data(n).pin = data(n).pin * gain(data(n).pmode + 1);
     clear cdata 
