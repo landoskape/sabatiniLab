@@ -1,4 +1,4 @@
-function handle = plotvc(t,data,fig,specs)
+function handle = plotvc(t,data,fig,specs,pointFlag)
 % plots data by columns and varys color with varycolor
 
 if nargin == 1
@@ -10,7 +10,14 @@ if size(data,2) == length(t) && size(data,1)~=1 && size(data,1)~=length(t)
     data = data';
 end
 
-NC = size(data,2);
+if (nargin > 4) && pointFlag
+    if ~isvector(data)
+        error('if points flag is on then data must be a vector');
+    end
+    NC = length(data); 
+else
+    NC = size(data,2);
+end
 cmap = varycolor(NC);
 
 if (nargin < 3)
@@ -18,7 +25,7 @@ if (nargin < 3)
 end
 
 specFlag = 0;
-if (nargin == 4)
+if (nargin >= 4) && ~isempty(specFlag)
     specFlag = 1;
     idxNumeric = cellfun(@isnumeric, specs, 'uni', 1);
     specs(idxNumeric) = cellfun(@num2str,specs(idxNumeric),'uni',0);
@@ -35,10 +42,18 @@ end
 hold on;
 for c = 1:NC
     if specFlag
-        cmd = sprintf('plot(t,data(:,c),''color'',cmap(c,:)%s);',specs);
+        if (nargin > 4) && pointFlag
+            cmd = sprintf('plot(t(c),data(c),''color'',cmap(c,:)%s);',specs);
+        else
+            cmd = sprintf('plot(t,data(:,c),''color'',cmap(c,:)%s);',specs);
+        end
         eval(cmd);
     else
-        plot(t,data(:,c),'color',cmap(c,:));
+        if (nargin > 4) && pointFlag
+            plot(t(c),data(c),'color',cmap(c,:));
+        else
+            plot(t,data(:,c),'color',cmap(c,:));
+        end
     end
 end
 
@@ -73,8 +88,6 @@ function ColorSet=varycolor(NumberOfPlots)
 
 %Created by Daniel Helmick 8/12/2008
 
-error(nargchk(1,1,nargin))%correct number of input arguements??
-error(nargoutchk(0, 1, nargout))%correct number of output arguements??
 
 %Take care of the anomolies
 if NumberOfPlots<1

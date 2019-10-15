@@ -1,6 +1,6 @@
 function nwb = cdNWB()
 
-nwb = '/Users/LandauLand/Documents/MATLAB/SabatiniLab/matnwb';
+nwb = '/Users/landauland/Documents/MATLAB/matnwb';
 
 if nargout
 	return

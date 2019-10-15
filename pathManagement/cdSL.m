@@ -1,4 +1,9 @@
-function cdSL
+function pth = cdSL
 
-cd('/Users/LandauLand/Documents/Research/SabatiniLab');
+pth = '/Users/LandauLand/Documents/Research/SabatiniLab';
+if nargout
+    return
+end
+cd(pth);
+clear pth
 

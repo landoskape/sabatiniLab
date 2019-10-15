@@ -1,20 +1,23 @@
-function [wnames,wid] = findWavesInAverage(pth,epoch,pulse,msg)
+function [wnames,wid] = findWavesInAverage(pth,epoch,pulse,channel,msg)
 % To be used with epoch as numeric
 
-if (nargin < 3), pulse = []; msg = []; end
-if (nargin < 4), msg = []; end
+if (nargin < 3), pulse = []; channel = 'AD0'; msg = []; end
+if (nargin < 4), channel = 'AD0'; msg = []; end
+if (nargin < 5), msg = []; end
 
 if ~isempty(pulse)
-    d = dir(fullfile(pth,sprintf('*e%dp%d*.mat',epoch,pulse)));
+    dPhys = dir(fullfile(pth,sprintf('*e%dp%davg*.mat',epoch,pulse)));
+    dImag = dir(fullfile(pth,sprintf('*e%dp%dc*.mat',epoch,pulse)));
+    d = cat(1,dPhys,dImag);
 else
-    d = dir(fullfile(pth,sprintf('*e%d*.mat',epoch)));
+    d = dir(fullfile(pth,sprintf('*e%dp*.mat',epoch)));
 end
 
 wnames = {d(:).name};
 
 % If statement that only runs if same average name has multiple phys
 % traces. Very unlikely if a pulse pattern number is assigned
-if sum(cellfun(@(c) contains(c, 'AD0'), wnames, 'uni', 1))>1
+if sum(cellfun(@(c) contains(c, channel), wnames, 'uni', 1))>1
     uiwait(errordlg(sprintf('%s\nMore than one average exist for epoch %d. Select manually...',msg,epoch)));
     [file,fpath] = uigetfile(fullfile(pth,'*.mat')); % Have user select a file
     
@@ -34,13 +37,16 @@ if sum(cellfun(@(c) contains(c, 'AD0'), wnames, 'uni', 1))>1
     wnames = {d(:).name};
 end
 
-idxInput = cellfun(@(c) contains(c,'AD1'),wnames, 'uni', 1);
-% fprintf(1,'NOTE: hard coding out AD1 because only used for input.\n');
-
+switch channel
+    case 'AD0'
+        idxInput = cellfun(@(c) contains(c,'AD1'),wnames, 'uni', 1);
+    case 'AD1'
+        idxInput = cellfun(@(c) contains(c,'AD0'),wnames, 'uni', 1);
+end
 wnames = wnames(~idxInput);
 
 wnames = cellfun(@(c) c(1:strfind(c,'.')-1), wnames,'uni',0);
-idxPhys = cellfun(@(c) contains(c,'AD0'),wnames,'uni',1);
+idxPhys = cellfun(@(c) contains(c,channel),wnames,'uni',1);
 imagChs = cellfun(@(c) str2double(c(strfind(c,'c')+1:strfind(c,'r')-1)), wnames,'uni', 1);
 imagRoi = cellfun(@(c) str2double(c(strfind(c,'r')+1:strfind(c,'_')-1)), wnames,'uni', 1);
 wid = cat(2, idxPhys(:), imagChs(:), imagRoi(:));
